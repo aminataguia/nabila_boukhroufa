@@ -179,24 +179,41 @@
         <p>Décrivez le contexte, les langues, la date/heure, le support (présentiel/visio) et joignez les documents utiles.</p>
       </details>
     </section>
+<!-- CONTACT -->
+<section id="contact">
+  <h2 class="section-title">Contact</h2>
+  <div class="card">
+    <!-- Formulaire Netlify -->
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/merci.html">
+      <!-- Identifiant du formulaire -->
+      <input type="hidden" name="form-name" value="contact">
 
-    <!-- CONTACT -->
-    <section id="contact">
-      <h2 class="section-title">Contact</h2>
-      <div class="card">
-        <form name="contact" onsubmit="location.href='mailto:contact@exemple.fr?subject=Demande%20de%20devis&body='+encodeURIComponent(document.getElementById('m').value); return false;">
-          <label>Votre message</label>
-          <textarea id="m" rows="5" placeholder="Objet, date, langues, contexte…"></textarea>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <input type="text" placeholder="Votre nom" aria-label="Votre nom">
-            <input type="email" placeholder="Votre email" aria-label="Votre email">
-          </div>
-          <button class="btn" type="submit">Envoyer</button>
-        </form>
-        <p class="muted" style="margin-top:10px">Ou écrivez-moi : <a href="mailto:saamtraduction@free.fr">contact@exemple.fr</a> · 06 00 00 00 00</p>
+      <!-- Champ honeypot anti-bot -->
+      <p style="display:none">
+        <label>Ne pas remplir : <input name="bot-field"></label>
+      </p>
+
+      <label>Votre message</label>
+      <textarea name="message" rows="5" placeholder="Objet, date, langues, contexte…" required></textarea>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="text" name="nom" placeholder="Votre nom" aria-label="Votre nom" required>
+        <input type="email" name="email" placeholder="Votre email" aria-label="Votre email" required>
       </div>
-    </section>
-  </main>
+
+      <!-- reCAPTCHA Netlify (optionnel mais conseillé) -->
+      <div data-netlify-recaptcha="true"></div>
+
+      <label><input type="checkbox" required> J’accepte d’être contacté·e (RGPD)</label>
+      <button class="btn" type="submit">Envoyer</button>
+    </form>
+
+    <p class="muted" style="margin-top:10px">
+      Ou écrivez-moi : <a href="mailto:saamtraduction@free.fr">saamtraduction@free.fr</a> · 06 64 44 64 49
+    </p>
+  </div>
+</section>
+
 
   <footer class="wrap">
     © 2025 — Interprète. <span class="muted">RGPD : aucune donnée stockée via ce formulaire (envoi mailto).</span>
@@ -212,6 +229,5 @@
     });
   </script>
 
-  <!-- Don’t forget: si tu pars d’un template HTML5 UP, conserve l’attribution “Design: HTML5 UP”. -->
 </body>
 </html>
