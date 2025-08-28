@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Interprète & Traduction — Accueil</title>
+  <meta name="description" content="Interprétation et traduction professionnelles — FR · EN · AR. Rendez-vous administratifs, audiences, conférences.">
+  <style>
+    :root{
+      --brown:#6B4F3A;       /* Marron principal */
+      --brown-700:#5A4231;   /* Variante foncée */
+      --ivory:#F8F5F2;       /* Fond ivoire */
+      --ink:#2A2522;         /* Texte */
+      --muted:#8a837d;
+      --card:#ffffff;
+      --ring:#e8e2dc;
+      --shadow: 0 10px 30px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+    }
+    /* Reset doux */
+    *{box-sizing:border-box} html:focus-within{scroll-behavior:smooth}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--ivory);color:var(--ink);line-height:1.6}
+    a{color:var(--brown);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:auto;padding:0 20px}
+    /* Header */
+    .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip:focus{left:16px;top:16px;width:auto;height:auto;background:#fff;padding:8px 12px;border-radius:8px;box-shadow:var(--shadow)}
+    header{position:sticky;top:0;background:rgba(248,245,242,.85);backdrop-filter:blur(6px);border-bottom:1px solid var(--ring);z-index:20}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{font-weight:700;letter-spacing:.3px;color:var(--brown)}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{padding:8px 10px;border-radius:8px}
+    .menu a:hover{background:#efe9e3}
+    .burger{display:none;border:1px solid var(--ring);background:#fff;border-radius:10px;padding:10px}
+    /* Hero */
+    .hero{display:grid;gap:28px;grid-template-columns:1.1fr .9fr;align-items:center;padding:72px 0 56px}
+    .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:#efe9e3;color:var(--brown);font-size:.85rem}
+    h1{font-size:clamp(28px,5vw,44px);line-height:1.15;margin:.35em 0 .5em}
+    p.lead{font-size:clamp(16px,2.5vw,19px);color:#3a3430}
+    .btn{display:inline-block;padding:12px 18px;border-radius:999px;border:1px solid var(--brown);color:#fff;background:var(--brown)}
+    .btn:hover{background:var(--brown-700);border-color:var(--brown-700)}
+    /* Cards / sections */
+    section{padding:16px 0;margin-bottom:6px}
+    .section-title{font-size:1.6rem;margin:10px 0 14px}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+    .card{background:var(--card);border:1px solid var(--ring);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+    .muted{color:var(--muted)}
+    /* Tarifs */
+    .prices{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+    .price .h{font-weight:700;font-size:1.1rem;margin-bottom:6px}
+    .price .v{font-size:1.35rem}
+    /* FAQ */
+    details{background:#fff;border:1px solid var(--ring);border-radius:14px;padding:14px}
+    details+details{margin-top:10px}
+    summary{cursor:pointer;font-weight:600}
+    /* Avis */
+    .quotes{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+    .quote{background:#fff;border:1px solid var(--ring);border-radius:18px;padding:16px;font-style:italic}
+    /* Contact */
+    form{display:grid;gap:10px}
+    input,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--ring);background:#fff}
+    input:focus,textarea:focus{outline:2px solid var(--brown);outline-offset:1px}
+    footer{margin:40px 0 24px;padding-top:14px;border-top:1px solid var(--ring);font-size:.95rem;color:var(--muted)}
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .grid,.prices,.quotes{grid-template-columns:1fr}
+      .menu{display:none}
+      .burger{display:block}
+      .menu.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:#fff;border-bottom:1px solid var(--ring);padding:10px}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+
+  <header>
+    <div class="wrap nav">
+      <div class="brand">Interprète</div>
+      <nav>
+        <button class="burger" aria-expanded="false" aria-controls="menu" id="burger">Menu</button>
+        <div class="menu" id="menu">
+          <a href="#apropos">À propos</a>
+          <a href="#services">Services</a>
+          <a href="#tarifs">Tarifs</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact" class="btn">Devis</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="contenu">
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <span class="tag">Interprétation & Traduction</span>
+        <h1>Clarté, précision et confidentialité.</h1>
+        <p class="lead">Interprète FR · EN · AR pour audiences, rendez-vous administratifs et conférences. Restitution fidèle, délais tenus.</p>
+        <a class="btn" href="#contact">Me contacter</a>
+      </div>
+      <div class="card">
+        <strong>Spécialisations</strong>
+        <ul style="margin:10px 0 0;padding-left:18px">
+          <li>Terminologie juridique et administrative</li>
+          <li>Assermentée / expérimentée</li>
+          <li>Présentiel & visio (Zoom/Teams)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- A PROPOS -->
+    <section id="apropos">
+      <h2 class="section-title">À propos</h2>
+      <div class="card">
+        <p>Nabila Boukhroufa , interprète assermenté depuis plus de 15 ans, ayant obtenu la confiance de miller de client , auto ecole , tribunal de justice . Intervention rapide en consécutive et simultanée, avec préparation terminologique en amont et respect strict de la confidentialité.</p>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+      <h2 class="section-title">Services</h2>
+      <div class="grid">
+        <div class="card"><strong>Traduction certifiée</strong><br/>Actes d’état civil, jugements, contrats.</div>
+        <div class="card"><strong>Consécutive</strong><br/>Idéale pour rendez-vous, entretiens, dépôts de dossier.</div>
+        <div class="card"><strong>Simultanée</strong><br/>Conférences, webinaires, réunions multilingues.</div>
+      </div>
+    </section>
+
+    <!-- TARIFS -->
+
+    <section id="tarifs">
+      <h2 class="section-title">Tarifs indicatifs</h2>
+      <div class="prices">
+        <div class="card price">
+          <div class="h">Traduction certifiée</div>
+          <div class="v">À partir de 50 €/copie</div>
+          <div class="muted">Sur devis et délai express possible</div>
+        </div>
+        <div class="card price">
+          <div class="h">Rendez-vous (consécutive)</div>
+          <div class="v">80–120 € / h</div>
+          <div class="muted">+ préparation terminologique</div>
+        </div>
+    <!-- que mettre à la place du prix: honoraires ????
+      -->
+        <div class="card price">
+          <div class="h">Simultanée (demi-journée)</div>
+          <div class="v">450–600 €</div>
+          <div class="muted">Cabine/équipement en sus</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- AVIS -->
+    <section id="avis">
+        <!-- mettre  API google  -->
+      <h2 class="section-title">Avis</h2>
+      <div class="quotes">
+        <div class="quote">“Interprétation impeccable lors de l’audience — très professionnelle.”</div>
+        <div class="quote">“Excellente maîtrise du vocabulaire administratif, rendu très clair.”</div>
+        <div class="quote">“Disponible et ponctuelle, je recommande.”</div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <h2 class="section-title">FAQ</h2>
+      <details>
+        <summary>Quelles langues proposez-vous ?</summary>
+        <p>Français, anglais, arabe (autres langues sur réseau partenaire).</p>
+      </details>
+      <details>
+        <summary>Intervenez-vous à distance ?</summary>
+        <p>Oui, via Zoom/Teams, avec micros casque et connexion stable.</p>
+      </details>
+      <details>
+        <summary>Comment obtenir un devis ?</summary>
+        <p>Décrivez le contexte, les langues, la date/heure, le support (présentiel/visio) et joignez les documents utiles.</p>
+      </details>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2 class="section-title">Contact</h2>
+      <div class="card">
+        <form name="contact" onsubmit="location.href='mailto:contact@exemple.fr?subject=Demande%20de%20devis&body='+encodeURIComponent(document.getElementById('m').value); return false;">
+          <label>Votre message</label>
+          <textarea id="m" rows="5" placeholder="Objet, date, langues, contexte…"></textarea>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input type="text" placeholder="Votre nom" aria-label="Votre nom">
+            <input type="email" placeholder="Votre email" aria-label="Votre email">
+          </div>
+          <button class="btn" type="submit">Envoyer</button>
+        </form>
+        <p class="muted" style="margin-top:10px">Ou écrivez-moi : <a href="mailto:saamtraduction@free.fr">contact@exemple.fr</a> · 06 00 00 00 00</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    © 2025 — Interprète. <span class="muted">RGPD : aucune donnée stockée via ce formulaire (envoi mailto).</span>
+  </footer>
+
+  <script>
+    // Menu mobile
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu');
+    burger?.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  </script>
+
+  <!-- Don’t forget: si tu pars d’un template HTML5 UP, conserve l’attribution “Design: HTML5 UP”. -->
+</body>
+</html>
