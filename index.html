@@ -3,25 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Interprète & Traduction — Accueil</title>
-  <meta name="description" content="Interprétation et traduction professionnelles — FR · EN · AR. Rendez-vous administratifs, audiences, conférences.">
+  <title>Interprète-traductrice — Accueil</title>
+  <meta name="description" content="Interprète-traductrice assermentée — FR · EN · AR. Rendez-vous administratifs, audiences, actes. Prestations à distance.">
   <style>
     :root{
-      --brown:#6B4F3A;       /* Marron principal */
-      --brown-700:#5A4231;   /* Variante foncée */
-      --ivory:#F8F5F2;       /* Fond ivoire */
-      --ink:#2A2522;         /* Texte */
+      --brown:#6B4F3A;
+      --brown-700:#5A4231;
+      --ivory:#F8F5F2;
+      --ink:#2A2522;
       --muted:#8a837d;
       --card:#ffffff;
       --ring:#e8e2dc;
       --shadow: 0 10px 30px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
     }
-    /* la police en new time roman
-    mettre interprete traductice ne pas mettre les conferences 
-     */    
-    /* Reset doux */
+    /* Police Times New Roman */
     *{box-sizing:border-box} html:focus-within{scroll-behavior:smooth}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--ivory);color:var(--ink);line-height:1.6}
+    body{
+      margin:0;
+      font-family:"Times New Roman", Times, serif;
+      background:var(--ivory);
+      color:var(--ink);
+      line-height:1.6
+    }
     a{color:var(--brown);text-decoration:none} a:hover{text-decoration:underline}
     .wrap{max-width:1100px;margin:auto;padding:0 20px}
     /* Header */
@@ -30,9 +33,9 @@
     header{position:sticky;top:0;background:rgba(248,245,242,.85);backdrop-filter:blur(6px);border-bottom:1px solid var(--ring);z-index:20}
     .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
     .brand{font-weight:700;letter-spacing:.3px;color:var(--brown)}
-    .menu{display:flex;gap:18px;align-items:center}
-    .menu a{padding:8px 10px;border-radius:8px}
-    .menu a:hover{background:#efe9e3}
+    nav ul{display:flex;gap:18px;align-items:center;list-style:none;margin:0;padding:0}
+    nav a{padding:8px 10px;border-radius:8px}
+    nav a:hover{background:#efe9e3}
     .burger{display:none;border:1px solid var(--ring);background:#fff;border-radius:10px;padding:10px}
     /* Hero */
     .hero{display:grid;gap:28px;grid-template-columns:1.1fr .9fr;align-items:center;padding:72px 0 56px}
@@ -41,13 +44,13 @@
     p.lead{font-size:clamp(16px,2.5vw,19px);color:#3a3430}
     .btn{display:inline-block;padding:12px 18px;border-radius:999px;border:1px solid var(--brown);color:#fff;background:var(--brown)}
     .btn:hover{background:var(--brown-700);border-color:var(--brown-700)}
-    /* Cards / sections */
+    /* Sections */
     section{padding:16px 0;margin-bottom:6px}
     .section-title{font-size:1.6rem;margin:10px 0 14px}
     .grid{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
     .card{background:var(--card);border:1px solid var(--ring);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
     .muted{color:var(--muted)}
-    /* Tarifs */
+    /* Honoraires */
     .prices{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
     .price .h{font-weight:700;font-size:1.1rem;margin-bottom:6px}
     .price .v{font-size:1.35rem}
@@ -67,166 +70,297 @@
     @media (max-width:900px){
       .hero{grid-template-columns:1fr}
       .grid,.prices,.quotes{grid-template-columns:1fr}
-      .menu{display:none}
+      nav ul{display:none}
       .burger{display:block}
-      .menu.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:#fff;border-bottom:1px solid var(--ring);padding:10px}
+      nav ul.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:#fff;border-bottom:1px solid var(--ring);padding:10px}
     }
+        /* Avis */
+    .review{border:1px solid var(--ring);border-radius:14px;padding:14px;margin:10px 0;background:#fff}
+.review header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.review img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.stars{font-size:16px;line-height:1}
+.stars span{letter-spacing:1px}
+
   </style>
 </head>
+<!-- Google Maps JavaScript API (Places) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places" defer></script>
+
+<script>
+  // ====== CONFIG À REMPLACER ======
+  const PLACE_ID = "YOUR_PLACE_ID"; // ex: ChIJN1t_tDeuEmsRUsoyG83frY4
+  const MAX_REVIEWS = 6;            // combien d'avis afficher (max 5–10 selon Google)
+  // =================================
+
+  function initMapAndReviews(){
+    // 1) Carte centrée sur le lieu
+    const mapEl = document.getElementById('gmap');
+    const map = new google.maps.Map(mapEl,{zoom:15,center:{lat:0,lng:0},mapTypeControl:false,streetViewControl:false});
+
+    const service = new google.maps.places.PlacesService(map);
+    service.getDetails(
+      {
+        placeId: PLACE_ID,
+        fields: [
+          'name','rating','user_ratings_total','geometry.location',
+          'reviews','url','photos'
+        ],
+        reviews_sort: google.maps.places.ReviewSort.NEWEST
+      },
+      (place, status) => {
+        const container = document.getElementById('reviews');
+        if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+          container.innerHTML = '<p class="muted">Impossible de charger les avis pour le moment.</p>';
+          return;
+        }
+
+        // centre la carte + marqueur
+        map.setCenter(place.geometry.location);
+        new google.maps.Marker({map, position: place.geometry.location, title: place.name});
+
+        // en-tête (note globale)
+        const header = document.createElement('div');
+        header.className = 'card';
+        header.style.marginBottom = '10px';
+        header.innerHTML = `
+          <strong>${place.name}</strong><br>
+          <span class="stars" aria-label="${place.rating} sur 5">
+            ${renderStars(place.rating)} <span>(${place.rating.toFixed(1)} · ${place.user_ratings_total} avis)</span>
+          </span>
+          <div><a href="${place.url}" target="_blank" rel="noopener">Voir sur Google</a></div>
+        `;
+        container.appendChild(header);
+
+        // liste des avis
+        if (place.reviews && place.reviews.length){
+          place.reviews.slice(0, MAX_REVIEWS).forEach(r => {
+            const item = document.createElement('article');
+            item.className = 'review';
+            item.innerHTML = `
+              <header>
+                <img src="${r.profile_photo_url || ''}" alt="">
+                <div>
+                  <div><strong>${escapeHTML(r.author_name || 'Utilisateur Google')}</strong></div>
+                  <div class="stars" aria-label="${r.rating} sur 5">${renderStars(r.rating)}</div>
+                  <small class="muted">${timeAgo(r.time)}</small>
+                </div>
+              </header>
+              <p>${escapeHTML(r.text || '')}</p>
+            `;
+            container.appendChild(item);
+          });
+        } else {
+          container.innerHTML += '<p class="muted">Aucun avis disponible pour le moment.</p>';
+        }
+      }
+    );
+  }
+
+  // étoiles ★☆☆☆☆
+  function renderStars(score){
+    const full = Math.round(score);
+    return '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(full, 5);
+  }
+
+  function timeAgo(unix){
+    const diff = Math.max(1, (Date.now()/1000 - unix));
+    const days = Math.floor(diff/86400);
+    if (days < 1) return 'aujourd’hui';
+    if (days === 1) return 'il y a 1 jour';
+    if (days < 30) return `il y a ${days} jours`;
+    const months = Math.floor(days/30);
+    if (months < 12) return `il y a ${months} mois`;
+    const years = Math.floor(months/12);
+    return `il y a ${years} an${years>1?'s':''}`;
+  }
+
+  // sécurité XSS minimale
+  function escapeHTML(s){ return (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  // lance quand l’API est prête
+  window.addEventListener('load', () => {
+    if (window.google && google.maps && google.maps.places){
+      initMapAndReviews();
+    } else {
+      // Si le script a defer: attends qu'il soit chargé
+      const chk = setInterval(() => {
+        if (window.google && google.maps && google.maps.places){
+          clearInterval(chk); initMapAndReviews();
+        }
+      }, 100);
+    }
+  });
+</script>
+
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
 
   <header>
     <div class="wrap nav">
-      <div class="brand">Nabila Boukhroufa - Interprète</div>
-      <nav>
+      <div class="brand">Nabila Boukhroufa — Interprète-traductrice</div>
+      <nav aria-label="Navigation principale">
         <button class="burger" aria-expanded="false" aria-controls="menu" id="burger">Menu</button>
-        <div class="menu" id="menu">
-          <a href="#apropos">À propos</a>
-          <a href="#services">Services</a>
-          <a href="#tarifs">Tarifs</a>
-          <a href="#faq">FAQ</a>
-          <a href="#contact" class="btn">Devis</a>
-        </div>
+        <ul id="menu">
+          <li><a href="#apropos">À propos</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#honoraires">Honoraires</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact" class="btn">Devis</a></li>
+        </ul>
       </nav>
     </div>
   </header>
 
   <main class="wrap" id="contenu">
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero" aria-labelledby="hero-title">
       <div>
         <span class="tag">Interprétation & Traduction</span>
-        <h1>Clarté, Précision et Confidentialité.</h1>
-        <p class="lead">Interprète et traductrice Francais · Anglais · Arabe judiciaire,. Restitution fidèle, délais tenus.</p>
+        <h1 id="hero-title">Clarté, précision et confidentialité</h1>
+        <p class="lead">
+          Interprète-traductrice (français · anglais · arabe) assermentée. Restitution fidèle, délais respectés. Prestations à distance uniquement.
+        </p>
         <a class="btn" href="#contact">Me contacter</a>
       </div>
-      <div class="card">
+      <aside class="card" aria-label="Spécialisations">
         <strong>Spécialisations</strong>
         <ul style="margin:10px 0 0;padding-left:18px">
           <li>Terminologie juridique et administrative</li>
-          <li>Assermentée / expérimentée</li>
-          <li>Prestation virtuelle ca veux dire que je ne me deplace pas </li>
+          <li>Assermentée, +20 ans d’expérience</li>
+          <li>À distance </li>
         </ul>
-      </div>
+      </aside>
     </section>
 
     <!-- A PROPOS -->
-    <section id="apropos">
-      <h2 class="section-title">À propos</h2>
+    <section id="apropos" aria-labelledby="apropos-titre">
+      <h2 class="section-title" id="apropos-titre">À propos</h2>
       <div class="card">
-        <p>Interprète-traductrice assermentée depuis plus de 20 ans, j’ai gagné la confiance d’un large public de clients : particuliers, notaires, auto-écoles et tribunaux de justice.
-J’interviens rapidement en interprétation consécutive et simultanée, avec une préparation terminologique rigoureuse et dans le respect absolu de la confidentialité.</p>
+        <p>
+          Interprète-traductrice assermentée depuis plus de 20&nbsp;ans, j’accompagne particuliers, notaires, auto-écoles et juridictions.
+          J’interviens en interprétation consécutive avec une préparation terminologique rigoureuse et dans le respect strict de la confidentialité.
+        </p>
       </div>
     </section>
 
     <!-- SERVICES -->
-    <section id="services">
-      <h2 class="section-title">Services</h2>
+    <section id="services" aria-labelledby="services-titre">
+      <h2 class="section-title" id="services-titre">Services</h2>
       <div class="grid">
-        <div class="card"><strong>Traduction certifiée</strong><br/>Actes d’état civil divers, jugements, contrats.</div>
-        <div class="card"><strong>consécurive et Simultanée</strong><br/>Idéale pour rendez-vous  et entretient a la mairie pour mariage, en vue d'un mariage  , .</div>
+        <article class="card">
+          <h3 style="margin:0 0 6px">Traduction certifiée</h3>
+          <p style="margin:0">Actes d’état civil, jugements, diplômes, contrats, permis.</p>
+        </article>
+        <article class="card">
+          <h3 style="margin:0 0 6px">Interprétation consécutive</h3>
+          <p style="margin:0">Rendez-vous administratifs, entretiens en mairie (mariage, dossiers), notariat, audiences.</p>
+        </article>
+        <article class="card">
+          <h3 style="margin:0 0 6px">Traduction littéraire (romans)</h3>
+          <p style="margin:0">Lecture, évaluation, traduction et relecture de manuscrits.</p>
+        </article>
       </div>
-          <!-- rajouter un balise traductio nde romans  -->
-
     </section>
 
-    <!-- TARIFS -->
-
-    <section id="tarifs">
-      <h2 class="section-title">Tarifs indicatifs</h2>
+    <!-- HONORAIRES -->
+    <section id="honoraires" aria-labelledby="honoraires-titre">
+      <h2 class="section-title" id="honoraires-titre">Honoraires indicatifs</h2>
       <div class="prices">
         <div class="card price">
           <div class="h">Traduction certifiée</div>
-          <div class="v">À partir de 45 €/copie</div>
-          <div class="muted">Sur devis et délai express possible</div>
+          <div class="v">à partir de 45&nbsp;€ / document</div>
+          <div class="muted">Devis personnalisé · Option express</div>
         </div>
         <div class="card price">
-          <div class="h">Rendez-vous mairie (consécutive et simultané)</div>
-          <div class="v">à partir de 100 € / h</div>
-
+          <div class="h">Interprétation en mairie / administratif</div>
+          <div class="v">à partir de 100&nbsp;€ / heure</div>
+          <div class="muted">Forfait possible selon dossier</div>
         </div>
-    <!-- que mettre à la place du prix: honoraires ????
-      -->
         <div class="card price">
-          <div class="h">Entreprise / pro autre </div>
-          <div class="v">sur devis </div>
-          <div class="muted">Cabine/équipement en sus</div>
+          <div class="h">Professionnels / entreprises</div>
+          <div class="v">sur devis</div>
+          <div class="muted">Équipement le cas échéant</div>
         </div>
-
       </div>
     </section>
 
     <!-- AVIS -->
-    <section id="avis">
-        <!-- mettre  API google  -->
-      <h2 class="section-title">Avis</h2>
-      <div class="quotes">
-        <div class="quote">“Interprétation impeccable lors de l’audience — très professionnelle.”</div>
-        <div class="quote">“Excellente maîtrise du vocabulaire administratif, rendu très clair.”</div>
-        <div class="quote">“Disponible et ponctuelle, je recommande.”</div>
-      </div>
-    </section>
+<section id="avis" aria-labelledby="avis-titre">
+  <h2 class="section-title" id="avis-titre">Avis</h2>
 
-    <!-- FAQ -->
-    <section id="faq">
-      <h2 class="section-title">FAQ</h2>
-      <details>
-        <summary>Quelles langues proposez-vous ?</summary>
-        <p>Français, anglais, arabe (autres langues sur réseau partenaire).</p>
-      </details>
-      <details>
-        <summary>Intervenez-vous à distance ?</summary>
-        <p>Oui, via Zoom/Teams, avec micros casque et connexion stable.</p>
-      </details>
-      <details>
-        <summary>Comment obtenir un devis ?</summary>
-        <p>Décrivez le contexte, les langues, la date/heure, le support (présentiel/visio) et joignez les documents utiles.</p>
-      </details>
-    </section>
-    <!-- autre question tel que le delais  -->
-<!-- CONTACT -->
-<section id="contact">
-  <h2 class="section-title">Contact</h2>
-  <div class="card">
-    <!-- Formulaire Netlify -->
-    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/merci.html">
-      <!-- Identifiant du formulaire -->
-      <input type="hidden" name="form-name" value="contact">
-
-      <!-- Champ honeypot anti-bot -->
-      <p style="display:none">
-        <label>Ne pas remplir : <input name="bot-field"></label>
-      </p>
-
-      <label>Votre message</label>
-      <textarea name="message" rows="5" placeholder="Objet, date, langues, contexte…" required></textarea>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <input type="text" name="nom" placeholder="Votre nom" aria-label="Votre nom" required>
-        <input type="email" name="email" placeholder="Votre email" aria-label="Votre email" required>
-      </div>
-
-      <!-- reCAPTCHA Netlify (optionnel mais conseillé) -->
-      <div data-netlify-recaptcha="true"></div>
-
-      <label><input type="checkbox" required> J’accepte d’être contacté·e (RGPD)</label>
-      <button class="btn" type="submit">Envoyer</button>
-    </form>
-
-    <p class="muted" style="margin-top:10px">
-      Ou écrivez-moi : <a href="mailto:saamtraduction@free.fr">saamtraduction@free.fr</a> · 06 64 44 64 49
-    </p>
+  <!-- Carte + liste d'avis -->
+  <div class="card" style="padding:0">
+    <div id="gmap" style="width:100%;height:280px;border-radius:18px 18px 0 0"></div>
+    <div id="reviews" style="padding:16px"></div>
   </div>
+
+  <p class="muted" style="margin-top:10px">
+    Les avis ci-dessous sont chargés depuis Google. Les noms et photos de profil affichés sont fournis par Google.
+  </p>
 </section>
 
+    <!-- FAQ -->
+    <section id="faq" aria-labelledby="faq-titre">
+      <h2 class="section-title" id="faq-titre">FAQ</h2>
+      <details>
+        <summary>Quelles langues proposez-vous&nbsp;?</summary>
+        <p>Français, anglais, arabe (autres langues via mon réseau partenaire).</p>
+      </details>
+      <details>
+        <summary>Intervenez-vous à distance&nbsp;?</summary>
+        <p>Oui, via Zoom/Teams, avec micro-casque et connexion stable. Je ne me déplace pas.</p>
+      </details>
+      <details>
+        <summary>Quels sont vos délais&nbsp;?</summary>
+        <p>Selon la longueur et la technicité. Pour un acte d’état civil, le délai est souvent de 24 à 72&nbsp;h. Option express possible.</p>
+      </details>
+      <details>
+        <summary>Comment obtenir un devis&nbsp;?</summary>
+        <p>Précisez le contexte, les langues, la date/heure, le support (visio) et joignez les documents utiles.</p>
+      </details>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-titre">
+      <h2 class="section-title" id="contact-titre">Contact</h2>
+      <div class="card">
+        <!-- Formulaire Netlify -->
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/merci.html">
+          <input type="hidden" name="form-name" value="contact">
+          <p style="display:none">
+            <label>Ne pas remplir : <input name="bot-field" aria-hidden="true" tabindex="-1"></label>
+          </p>
+
+          <label for="msg">Votre message</label>
+          <textarea id="msg" name="message" rows="5" placeholder="Objet, date, langues, contexte…" required></textarea>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <label class="sr-only" for="nom" style="position:absolute;left:-9999px">Votre nom</label>
+            <input id="nom" type="text" name="nom" placeholder="Votre nom" required>
+            <label class="sr-only" for="email" style="position:absolute;left:-9999px">Votre email</label>
+            <input id="email" type="email" name="email" placeholder="Votre email" required>
+          </div>
+
+          <!-- reCAPTCHA Netlify (optionnel) -->
+          <div data-netlify-recaptcha="true"></div>
+
+          <label><input type="checkbox" required> J’accepte d’être contacté·e (RGPD)</label>
+          <button class="btn" type="submit">Envoyer</button>
+        </form>
+
+        <p class="muted" style="margin-top:10px">
+          Ou écrivez-moi : <a href="mailto:saamtraduction@free.fr">saamtraduction@free.fr</a> · 06&nbsp;64&nbsp;44&nbsp;64&nbsp;49
+        </p>
+      </div>
+    </section>
+  </main>
 
   <footer class="wrap">
-    © 2025 — Interprète. <span class="muted">RGPD : aucune donnée stockée via ce formulaire (envoi mailto).</span>
+    © 2025 — Interprète-traductrice. <span class="muted">RGPD : aucune donnée stockée via ce formulaire (envoi via Netlify).</span>
   </footer>
 
   <script>
-    // Menu mobile
+    // Menu mobile (liste <ul>)
     const burger = document.getElementById('burger');
     const menu = document.getElementById('menu');
     burger?.addEventListener('click', () => {
@@ -234,6 +368,5 @@ J’interviens rapidement en interprétation consécutive et simultanée, avec u
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
   </script>
-
 </body>
 </html>
